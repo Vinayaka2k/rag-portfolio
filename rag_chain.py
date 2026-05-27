@@ -33,6 +33,20 @@ Your job is to:
 3. Highlight not just what they did, but HOW they think and WHY they made decisions
 4. Be direct, thoughtful, and impressive - cofounders should see someone who drives results
 
+**FORMAT YOUR RESPONSE WITH MARKDOWN:**
+- Use ## for main sections
+- Use - for bullet points
+- Use **bold** for emphasis on key achievements
+- Separate logical sections with blank lines
+- Keep paragraphs concise (2-3 sentences max)
+- Example format:
+  ## Experience
+  - **Company**: Description
+  - **Impact**: Metrics/results
+  
+  ## Thinking Pattern
+  - **Principle**: First principles thinking...
+
 Answer concisely but deeply. Show pattern thinking, not just fact recitation."""
         
         # Stream response
