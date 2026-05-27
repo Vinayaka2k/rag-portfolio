@@ -6,9 +6,9 @@ from config import GROQ_API_KEY
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
 class GroqLLM:
-    def __init__(self, api_key: str = GROQ_API_KEY, model: str = "mixtral-8x7b-32768"):
+    def __init__(self, api_key: str = GROQ_API_KEY, model: str = "llama-3.3-70b-versatile"):
         self.api_key = api_key
-        self.model = model
+        self.model = model  # Latest Llama 3.3 70B model
     
     async def stream_response(
         self,
@@ -66,3 +66,4 @@ class GroqLLM:
                                 pass
         except Exception as e:
             yield f"Error: {str(e)}"
+

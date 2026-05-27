@@ -1,6 +1,5 @@
 """Vector database and embedding management"""
 import chromadb
-from chromadb.config import Settings
 from sentence_transformers import SentenceTransformer
 from pathlib import Path
 from typing import List, Tuple
@@ -10,24 +9,21 @@ class EmbeddingManager:
     def __init__(self):
         """Initialize embedding model and vector store"""
         self.model = SentenceTransformer(MODEL_NAME)
-        self.db = chromadb.Client(
-            Settings(
-                chroma_db_impl="duckdb",
-                persist_directory=CHROMADB_PATH,
-                anonymized_telemetry=False,
-            )
-        )
+        # Use new Chroma API
+        self.client = chromadb.PersistentClient(path=CHROMADB_PATH)
         self.collection = None
     
     def create_collection(self, name: str = "resume_context"):
         """Create or get collection"""
         try:
-            self.collection = self.db.get_collection(name)
+            self.collection = self.client.get_collection(name)
+            print(f"Using existing collection: {name}")
         except:
-            self.collection = self.db.create_collection(
+            self.collection = self.client.create_collection(
                 name=name,
                 metadata={"hnsw:space": "cosine"}
             )
+            print(f"Created new collection: {name}")
     
     def index_chunks(self, chunks: List[str]):
         """Index text chunks into vector store"""
@@ -59,3 +55,4 @@ class EmbeddingManager:
         if results and results['documents']:
             return list(zip(results['documents'][0], results['distances'][0]))
         return []
+
