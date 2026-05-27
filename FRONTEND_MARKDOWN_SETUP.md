@@ -12,31 +12,35 @@ npm install react-markdown
 
 Replace your raw text display with markdown rendering:
 
-### Before (plain text):
+### Before (plain text - WRONG):
 ```jsx
+// This will display markdown as raw text without formatting!
 <div className="response-text">
-  {message.content}
+  {message.content}  // ❌ Shows "## Title" literally instead of rendering as header
 </div>
 ```
 
-### After (markdown):
+### After (markdown - CORRECT):
 ```jsx
 import ReactMarkdown from 'react-markdown';
 
 <div className="response-text">
   <ReactMarkdown
     components={{
-      h2: ({node, ...props}) => <h2 className="text-lg font-bold mt-3 mb-2" {...props} />,
-      ul: ({node, ...props}) => <ul className="list-disc list-inside space-y-1" {...props} />,
-      li: ({node, ...props}) => <li className="ml-2" {...props} />,
-      strong: ({node, ...props}) => <strong className="font-semibold" {...props} />,
-      p: ({node, ...props}) => <p className="mb-2" {...props} />,
+      h2: ({node, ...props}) => <h2 className="text-lg font-bold mt-4 mb-3 text-blue-600" {...props} />,
+      h3: ({node, ...props}) => <h3 className="text-base font-bold mt-3 mb-2" {...props} />,
+      ul: ({node, ...props}) => <ul className="list-disc list-inside space-y-2 ml-2" {...props} />,
+      li: ({node, ...props}) => <li className="mb-1" {...props} />,
+      strong: ({node, ...props}) => <strong className="font-semibold text-gray-900" {...props} />,
+      p: ({node, ...props}) => <p className="mb-3 leading-relaxed" {...props} />,
     }}
   >
-    {message.content}
+    {message.content}  // ✅ Renders "## Title" as <h2> tag
   </ReactMarkdown>
 </div>
 ```
+
+**KEY POINT:** If you're still seeing raw markdown text like "## Title" on the screen, you're not using `<ReactMarkdown>`. Switch to it immediately.
 
 ## Styling (Tailwind CSS example)
 
