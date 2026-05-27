@@ -8,4 +8,4 @@ load_dotenv()
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 CHROMADB_PATH = "./data/chromadb"
 DATA_DIR = "./data"
-MODEL_NAME = "all-MiniLM-L6-v2"
+MODEL_NAME = "paraphrase-MiniLM-L3-v2"
