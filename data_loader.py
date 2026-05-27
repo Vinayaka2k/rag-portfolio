@@ -26,14 +26,26 @@ def load_data() -> str:
     return combined_text
 
 def chunk_text(text: str, chunk_size: int = 500, overlap: int = 100) -> List[str]:
-    """Chunk text with sliding window"""
+    """Chunk text with sliding window, preserving section headers"""
     chunks = []
-    start = 0
     
-    while start < len(text):
-        end = min(start + chunk_size, len(text))
-        chunk = text[start:end]
-        chunks.append(chunk.strip())
-        start += chunk_size - overlap
+    # Split by major sections first
+    sections = text.split("## ")
     
-    return [c for c in chunks if c]  # Filter empty chunks
+    for section in sections:
+        if not section.strip():
+            continue
+        
+        # Add section header back
+        section_text = f"## {section}" if not section.startswith("##") else section
+        
+        # Chunk within each section
+        start = 0
+        while start < len(section_text):
+            end = min(start + chunk_size, len(section_text))
+            chunk = section_text[start:end].strip()
+            if chunk:
+                chunks.append(chunk)
+            start += chunk_size - overlap
+    
+    return chunks

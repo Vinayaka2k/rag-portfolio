@@ -16,8 +16,8 @@ class RAGChain:
     async def query(self, user_message: str) -> AsyncGenerator[str, None]:
         """Execute RAG query with streaming response"""
         
-        # Retrieve relevant context
-        search_results = self.embeddings.search(user_message, k=3)
+        # Retrieve relevant context (get top-5 for better coverage)
+        search_results = self.embeddings.search(user_message, k=5)
         
         if not search_results:
             context = ""

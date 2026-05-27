@@ -51,7 +51,7 @@ async def startup_event():
     
     # Load and chunk data
     portfolio_data = load_data()
-    chunks = chunk_text(portfolio_data, chunk_size=500, overlap=100)
+    chunks = chunk_text(portfolio_data, chunk_size=600, overlap=50)  # Optimized for better retrieval
     
     if not chunks:
         print("⚠️ Warning: No chunks found. Using sample data.")
