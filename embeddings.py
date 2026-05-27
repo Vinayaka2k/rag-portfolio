@@ -39,7 +39,7 @@ class EmbeddingManager:
         print(f"✅ Indexed {len(chunks)} chunks")
     
     def search(self, query: str, k: int = 3) -> List[Tuple[str, float]]:
-        """Search for relevant chunks"""
+        """Search for relevant chunks with optimized scoring"""
         if not self.collection:
             return []
         
@@ -49,5 +49,12 @@ class EmbeddingManager:
         )
         
         if results and results['documents']:
-            return list(zip(results['documents'][0], results['distances'][0]))
+            # Convert distances to similarity scores (lower distance = higher similarity)
+            # Chromadb returns distances, not similarities
+            chunks_with_scores = list(zip(results['documents'][0], results['distances'][0]))
+            
+            # Sort by relevance (lower distance = better match)
+            chunks_with_scores.sort(key=lambda x: x[1])
+            
+            return chunks_with_scores
         return []

@@ -16,14 +16,24 @@ class GroqLLM:
         user_message: str,
         context: str = ""
     ) -> AsyncGenerator[str, None]:
-        """Stream response from Groq API"""
+        """Stream response from Groq API with optimized parameters"""
         
+        # Format the context clearly for the LLM
         if context:
-            context_msg = f"\nContext from portfolio:\n{context}\n"
+            context_section = f"""**CONTEXT FROM PORTFOLIO:**
+
+{context}
+
+---"""
         else:
-            context_msg = ""
+            context_section = ""
         
-        full_message = f"{context_msg}\nUser question: {user_message}"
+        # Build the user message with clear structure
+        full_message = f"""{context_section}
+
+**QUESTION:** {user_message}
+
+Please provide a direct, insightful answer grounded in the context above."""
         
         headers = {
             "Authorization": f"Bearer {self.api_key}",
@@ -36,8 +46,9 @@ class GroqLLM:
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": full_message}
             ],
-            "temperature": 0.7,
-            "max_tokens": 1024,
+            "temperature": 0.6,  # Reduced from 0.7 for more grounded responses
+            "top_p": 0.9,  # Focus on higher probability tokens
+            "max_tokens": 1500,  # Increased from 1024 for more detailed responses
             "stream": True
         }
         

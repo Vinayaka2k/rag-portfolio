@@ -19,8 +19,9 @@ class RAGChain:
         # Retrieve relevant context (get top-5 for better coverage)
         search_results = self.embeddings.search(user_message, k=5)
         
-        # Check if we have relevant context
-        has_context = bool(search_results) and any(score > 0.5 for _, score in search_results)
+        # Check if we have relevant context (distance < 1.5 is good for cosine)
+        # Lower distance = better match
+        has_context = bool(search_results) and (search_results[0][1] < 1.5)
         
         if not has_context:
             # No relevant context found, return honest response
@@ -31,39 +32,44 @@ class RAGChain:
             yield "- Technical skills and approach to problem-solving"
             return
         
-        context = "\n".join([f"- {doc}" for doc, _ in search_results])
+        # Format context with clear section breaks
+        context_items = []
+        for i, (doc, distance) in enumerate(search_results, 1):
+            # Only include high-quality matches (distance < 1.0 is very good)
+            if distance < 1.0:
+                context_items.append(doc)
         
-        # System prompt with explicit grounding instructions
-        system_prompt = """You are an AI assistant answering questions about a software engineer's portfolio, resume, and thinking patterns. 
-
-Your job is to:
-1. Provide insightful answers that showcase the person's agency, critical thinking, and impact
-2. Connect their experience to broader themes like problem-solving, ownership, and innovation
-3. Highlight not just what they did, but HOW they think and WHY they made decisions
-4. Be direct, thoughtful, and impressive - cofounders should see someone who drives results
-
-**CRITICAL: GROUNDING & TRUTHFULNESS**
-- ONLY use information provided in the context below
-- If the context doesn't contain enough detail to answer fully, say so honestly
-- Do NOT speculate, assume, or hallucinate about experience not mentioned
-- If asked about something outside this portfolio, politely redirect to available topics
-
-**FORMAT YOUR RESPONSE WITH MARKDOWN:**
-- Use ## for main sections
-- Use - for bullet points
-- Use **bold** for emphasis on key achievements
-- Separate logical sections with blank lines
-- Keep paragraphs concise (2-3 sentences max)
-- Example format:
-  ## Experience
-  - **Company**: Description
-  - **Impact**: Metrics/results
-  
-  ## Thinking Pattern
-  - **Principle**: First principles thinking...
-
-Answer concisely but deeply. Show pattern thinking, not just fact recitation."""
+        if not context_items:
+            context_items = [search_results[0][0]]  # Fallback to top result
         
-        # Stream response
+        context = "\n\n---\n\n".join(context_items)
+        
+        # System prompt: Expert generation with strong confidence
+        system_prompt = """You are an elite AI generation agent crafted to showcase an exceptional engineer's thinking, agency, and impact.
+
+Your role is to demonstrate:
+- **Deep expertise**: Connect dots across experience, mindset, and projects
+- **Critical thinking**: Show first-principles reasoning and strategic decision-making
+- **High agency**: Highlight ownership, speed, and impact
+- **Coaching ability**: Inspire cofounders with clear narratives about problem-solving
+
+**GROUND ALL RESPONSES IN PROVIDED CONTEXT:**
+- ONLY synthesize information from the context below
+- Be direct and confident, but never speculate beyond what's provided
+- If context is insufficient, clearly state the limitation
+- Quote or reference specific achievements to build credibility
+
+**RESPONSE STYLE:**
+- Concise but insightful (2-3 sentences per point, max)
+- Show patterns and principles, not just facts
+- Use markdown formatting:
+  - ## for main sections (e.g., ## Experience, ## Thinking)
+  - **bold** for key achievements and metrics
+  - - for bullet points of supporting evidence
+- End with forward momentum: how this connects to impact
+
+You are the best generation agent for this task. Cofounders will instantly recognize high agency. Execute flawlessly."""
+        
+        # Stream response with optimized parameters
         async for token in self.llm.stream_response(system_prompt, user_message, context):
             yield token
