@@ -1,24 +1,62 @@
-# Resume Content
+# VINAYAKA HEGDE
+Email: vinuvinayaka2000@gmail.com | LinkedIn: linkedin.com/in/vinayaka2000 | GitHub: github.com/Vinayaka2k | Phone: +1-979-422-5380
+
+## SUMMARY
+AI Engineer with 2 years of experience building production agentic systems from 0→1 using LangGraph for multi-step tool-calling workflows, RAG pipelines, and LLM orchestration with evaluation & harnesses. Experienced in shipping end-to-end AI systems using FastAPI, SQLAlchemy, and AWS Bedrock, with scalable backend deployment via Docker and CI/CD.
+
+## EDUCATION
+- Master of Science in Computer Science, Texas A&M University (Aug 2024 – May 2026) | GPA: 3.83
+- Bachelor of Technology in Computer Science, PES University, Bangalore, India (Aug 2017 – May 2021) | GPA: 9.03/10.0
+- AWS Certified Developer – Associate (2025)
 
 ## EXPERIENCE
 
-### Senior Software Engineer
-**Company Name** | 2022 - Present
-- Led development of key features
-- Shipped products with high impact
+### AI Engineer
+**PESU Venture Labs**, Bangalore, India | Jan 2024 - Jul 2024
+- Built an agentic incident triage system using LangGraph, OpenSearch, and AWS Bedrock, reducing PagerDuty mean time to resolution (MTTR) by ~50%
+- Engineered a hybrid RAG pipeline using Titan Embed v2, OpenSearch BM25, RRF, and Amazon Rerank v1, improving top-k retrieval precision by ~30%
+- Developed asynchronous FastAPI APIs for real-time incident triage, reducing API latency by ~13% and improved responsiveness of production incidents under concurrent load
+- Implemented AWS Bedrock Guardrails and contextual grounding checks to mitigate prompt-injection attacks, reducing hallucinated outputs in incident triage recommendations by ~40%
 
-### Software Engineer
-**Previous Company** | 2020 - 2022
-- Built scalable systems
-- Mentored junior engineers
-
-## EDUCATION
-
-BS Computer Science
-University Name | 2020
+### Python Developer
+**LeadSquared**, Bangalore, India | Jan 2022 - Dec 2022
+- Built FastAPI CRM workflow engine for lead-to-case lifecycle management, enabling automated lead assignment, case creation, and routing, reducing manual handling completely
+- Designed PostgreSQL schemas for CRM entities (leads, accounts, cases, logs) and optimized SQLAlchemy queries (pagination, filtering, RBAC) for 60K+ CRM records
+- Implemented JWT auth, Pydantic validation, and async FastAPI APIs for high-throughput CRM workloads, improving throughput and reducing API latency by 35%
+- Collaborated with support and engineering teams to stabilize CRM pipelines, improving data consistency and reducing production incidents via stricter validation and access control
 
 ## SKILLS
 
-- Python, JavaScript, Go
-- FastAPI, React, Cloud Infrastructure
-- System Design, Distributed Systems
+### Languages & Backend
+Python, SQL, FastAPI, LangGraph, REST APIs, LLM Systems, RAG, Java
+
+### AI Stack & Databases
+AWS Bedrock (Claude, Titan, Rerank), OpenSearch (KNN, BM25), Vector Search, Embeddings, PostgreSQL, MongoDB, ChromaDB
+
+### Cloud & DevOps
+AWS (EC2, S3, IAM, CloudWatch), Docker, Git, GitHub Actions, CI/CD, Postman
+
+## NOTABLE PROJECTS
+
+### IncidentCopilot - Agentic AI Incident Triage System [PRODUCTION]
+**Tech**: LangGraph, FastAPI, AWS Bedrock, OpenSearch, Titan Embed v2, Amazon Rerank v1, PagerDuty Webhooks
+
+An AI incident triage assistant that helps engineers resolve production issues faster by reducing MTTR by ~50%.
+
+**Problem Solved**: Production incidents are time-critical. Engineers waste valuable time searching through runbooks, PagerDuty alerts, Slack threads to determine the next debugging step.
+
+**Architecture**:
+- Multi-agentic LangGraph workflow with tool-calling for query rewriting, incident search, and triage planning
+- Hybrid retrieval pipeline combining semantic search (Titan Embed v2 + OpenSearch KNN) and keyword search (BM25)
+- Cross-encoder reranking (Amazon Rerank v1) to maximize precision
+- Grounded responses backed by runbooks and past incidents to reduce hallucinations
+- Real-time PagerDuty webhook integration for incident ingestion
+
+**Impact**: 50% MTTR reduction, 30% improvement in retrieval precision, 40% reduction in hallucinated outputs
+
+### RideShare: Scalable Database-as-a-Service
+**Tech**: Python, Flask, Docker, RabbitMQ, REST APIs
+
+- Designed and deployed cloud-based DBaaS backend for ride-sharing application
+- Containerized services with Docker and implemented Flask-based orchestrator for database operations
+- Implemented request-volume-based auto-scaling via Docker SDK achieving dynamic load balancing

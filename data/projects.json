@@ -1,22 +1,43 @@
 {
   "projects": [
     {
-      "name": "Project Alpha",
-      "description": "Built a real-time data pipeline that processed 1M+ events/day",
-      "impact": "Reduced query latency by 60%, enabled new product features",
-      "what_i_did": "Designed architecture, implemented core service, optimized for scale"
+      "name": "IncidentCopilot - Agentic AI Incident Triage System",
+      "description": "Production-deployed agentic AI system that helps engineers resolve production incidents faster by reducing MTTR by ~50%",
+      "problem": "Production incidents are time-critical. Engineers waste valuable time searching through runbooks, PagerDuty alerts, Slack threads to determine the next debugging step",
+      "impact": "50% reduction in MTTR, 30% improvement in retrieval precision, 40% reduction in hallucinated outputs",
+      "tech_stack": ["LangGraph", "FastAPI", "AWS Bedrock", "OpenSearch", "Titan Embed v2", "Amazon Rerank v1", "PagerDuty Webhooks"],
+      "key_features": [
+        "Multi-agentic LangGraph workflow with tool-calling",
+        "PagerDuty webhook integration for real-time incident ingestion",
+        "Hybrid RAG pipeline: Semantic search (Titan Embed v2 + KNN) + Keyword search (BM25) + Cross-encoder reranking",
+        "Grounded responses backed by runbooks and past incidents",
+        "AWS Bedrock Guardrails to mitigate prompt-injection and hallucinations"
+      ],
+      "why_impressive": "This is not a toy RAG app. It's a production agentic system with tool-calling, multi-step workflows, and real business impact. Shows deep understanding of: (1) LLM orchestration, (2) agentic AI patterns, (3) production systems thinking, (4) solving real engineer pain points"
     },
     {
-      "name": "Project Beta",
-      "description": "Led migration of legacy system to microservices",
-      "impact": "Enabled 10x faster feature deployment, improved team velocity",
-      "what_i_did": "Scoped the work, built migration strategy, mentored team through transition"
+      "name": "FastAPI CRM Workflow Engine",
+      "description": "Built high-throughput CRM workflow engine for lead-to-case lifecycle management",
+      "impact": "Eliminated manual lead handling completely, optimized 60K+ CRM records, reduced API latency by 35%",
+      "tech_stack": ["Python", "FastAPI", "PostgreSQL", "SQLAlchemy", "JWT Auth", "Pydantic"],
+      "key_features": [
+        "Automated lead assignment, case creation, and routing",
+        "Optimized PostgreSQL schemas with pagination, filtering, RBAC",
+        "Asynchronous FastAPI for high-throughput workloads",
+        "JWT authentication and Pydantic validation"
+      ]
     },
     {
-      "name": "Project Gamma",
-      "description": "Created developer tooling that 3x'd team productivity",
-      "impact": "Saved 100+ engineer hours/month, became standard across org",
-      "what_i_did": "Identified pain point, shipped MVP in 2 weeks, iterated based on feedback"
+      "name": "RideShare: Scalable Database-as-a-Service",
+      "description": "Cloud-based DBaaS backend for ride-sharing application with dynamic auto-scaling",
+      "impact": "Request-volume-based auto-scaling, improved availability and load balancing",
+      "tech_stack": ["Python", "Flask", "Docker", "RabbitMQ", "REST APIs"],
+      "key_features": [
+        "Containerized microservices architecture",
+        "Flask-based orchestrator for database operations",
+        "RabbitMQ for RPC communication",
+        "Docker SDK-based auto-scaling based on request volume"
+      ]
     }
   ]
 }
