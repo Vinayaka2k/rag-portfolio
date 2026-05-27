@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "rag-portfolio"
+version = "0.1.0"
+description = "Lightweight RAG chatbot backend for agentic portfolio"
+authors = ["Vinayaka Hegde <your-email@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.104.1"
+uvicorn = "^0.24.0"
+chromadb = "^0.4.21"
+sentence-transformers = "^2.2.2"
+python-dotenv = "^1.0.0"
+aiohttp = "^3.9.1"
+pydantic = "^2.5.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

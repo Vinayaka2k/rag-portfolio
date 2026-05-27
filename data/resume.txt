@@ -1,0 +1,24 @@
+# Resume Content
+
+## EXPERIENCE
+
+### Senior Software Engineer
+**Company Name** | 2022 - Present
+- Led development of key features
+- Shipped products with high impact
+
+### Software Engineer
+**Previous Company** | 2020 - 2022
+- Built scalable systems
+- Mentored junior engineers
+
+## EDUCATION
+
+BS Computer Science
+University Name | 2020
+
+## SKILLS
+
+- Python, JavaScript, Go
+- FastAPI, React, Cloud Infrastructure
+- System Design, Distributed Systems

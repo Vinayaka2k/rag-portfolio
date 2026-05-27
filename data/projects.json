@@ -1,0 +1,22 @@
+{
+  "projects": [
+    {
+      "name": "Project Alpha",
+      "description": "Built a real-time data pipeline that processed 1M+ events/day",
+      "impact": "Reduced query latency by 60%, enabled new product features",
+      "what_i_did": "Designed architecture, implemented core service, optimized for scale"
+    },
+    {
+      "name": "Project Beta",
+      "description": "Led migration of legacy system to microservices",
+      "impact": "Enabled 10x faster feature deployment, improved team velocity",
+      "what_i_did": "Scoped the work, built migration strategy, mentored team through transition"
+    },
+    {
+      "name": "Project Gamma",
+      "description": "Created developer tooling that 3x'd team productivity",
+      "impact": "Saved 100+ engineer hours/month, became standard across org",
+      "what_i_did": "Identified pain point, shipped MVP in 2 weeks, iterated based on feedback"
+    }
+  ]
+}
