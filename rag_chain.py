@@ -1,120 +1,157 @@
 """RAG chain orchestration"""
 from embeddings import EmbeddingManager
 from llm import GroqLLM
-from typing import AsyncGenerator
+from typing import AsyncGenerator, List, Tuple
+
 
 class RAGChain:
     def __init__(self):
         self.embeddings = EmbeddingManager()
         self.llm = GroqLLM()
-        self.embeddings.create_collection()
-    
-    def setup(self, chunks):
-        """Initialize the RAG chain with indexed chunks"""
-        self.embeddings.index_chunks(chunks)
-    
+        self.embeddings.create_collections()
+
+    def setup(self, general_chunks: List[str], faq_chunks: List[str] = None):
+        """Index both general and FAQ chunks"""
+        self.embeddings.index_general_chunks(general_chunks)
+        if faq_chunks:
+            self.embeddings.index_faq_chunks(faq_chunks)
+
+    # ------------------------------------------------------------------ #
+    # Core query pipeline
+    # ------------------------------------------------------------------ #
+
     async def query(self, user_message: str) -> AsyncGenerator[str, None]:
-        """Execute RAG query with streaming response"""
-        
-        # Retrieve relevant context (increased to k=8 to ensure IncidentCopilot is included)
-        search_results = self.embeddings.search(user_message, k=8)
-        
-        # Check if we have relevant context
-        has_context = bool(search_results) and (search_results[0][1] < 1.5)
-        
+        """
+        Retrieval priority:
+          1. FAQ collection  — if a close match exists (distance < 0.55),
+             the answer is already written; the LLM only lightly formats it.
+          2. General collection — resume / mindset / projects chunks.
+             The LLM synthesises an answer from the retrieved context.
+        """
+
+        # ── Step 1: try FAQ first ───────────────────────────────────────
+        faq_results = self.embeddings.search_faq(user_message, k=1)
+
+        if faq_results:
+            faq_doc, faq_distance = faq_results[0]
+            async for token in self._stream_faq_response(
+                user_message, faq_doc
+            ):
+                yield token
+            return
+
+        # ── Step 2: fall back to general retrieval ─────────────────────
+        general_results = self.embeddings.search_general(user_message, k=8)
+
+        has_context = bool(general_results) and general_results[0][1] < 1.5
         if not has_context:
             yield "I don't have information about that in Vinayaka's portfolio. "
             yield "Feel free to ask about:\n"
-            yield "- Experience and projects (especially IncidentCopilot)\n"
+            yield "- His projects (IncidentCopilot, FastAPI CRM Workflow Engine)\n"
             yield "- Thinking patterns and mindset\n"
-            yield "- Technical skills and approach to problem-solving"
+            yield "- Technical skills and agentic AI experience"
             return
-        
-        # Format context with clear section breaks
-        context_items = []
-        for i, (doc, distance) in enumerate(search_results, 1):
-            if distance < 1.0:
-                context_items.append(doc)
-        
+
+        # Filter to high-quality chunks only; always keep at least one
+        context_items = [
+            doc for doc, dist in general_results if dist < 1.0
+        ]
         if not context_items:
-            context_items = [search_results[0][0]]
-        
+            context_items = [general_results[0][0]]
+
         context = "\n\n---\n\n".join(context_items)
-        
-        system_prompt = """You are an elite response generator for Vin's portfolio. Your job is to answer questions about his projects, experience, skills, and thinking with **maximum specificity and accuracy**.
-
-**CRITICAL RULES:**
-
-1. **ANSWER WHAT IS ASKED - USE EXACT DETAILS**
-   - If the query asks about "most impressive" or "best project" or "most impressive thing built by Vin": Identify IncidentCopilot as the PRIMARY answer and answer with the exact IncidentCopilot description text. Only mention other projects if directly asked
-   - If the query asks about "design tradeoffs" or "Explain the design tradeoffs": Answer with the exact Design Tradeoffs structure below and include a `## Design Tradeoffs` header.
-   - If the query asks "why is Vin in the top 1% of builders" or "why should I hire Vin": Answer with the exact top 1% builder narrative below.
-   - If the query asks about projects: Use EXACT project names with specific metrics
-   - If the query asks about thinking: Show HOW with concrete project examples  
-   - DO NOT add generic content unless directly asked
-
-**DESIGN TRADEOFFS TEMPLATE:**
-```
-## Design Tradeoffs
-Vin believes **perfect is the enemy of good**, opting for an **solution that solves the real problem shipped today**, rather than a **perfect 100% solution that never ships**
-- He emphasizes on delivering functional solutions that meet customer needs.
-- Vin understands that the best entrepreneurs and engineers are those who can **execute on their vision relentlessly**, which guides his design decisions and tradeoffs.
-- Impact summary: This approach enables Vin to deliver high-impact solutions quickly, such as the **shipping the complete MVP of an incident triage system within a month**, demonstrating the effectiveness of his design tradeoffs in driving real business value.
-```
-
-**TOP 1% BUILDER TEMPLATE:**
-```
-Vin is the top 1% of builders because:
-- Of his **speed**, **customer obsession**, and **technical excellence**, as evident in his previous work, **FastAPI CRM Workflow Engine, and IncidentCopilot**, which eliminated manual lead handling, optimized **60K+ CRM records**, and reduced **API latency by over 30%**.
-- **Customer-centric approach**: Vin builds systems that genuinely reduce the pain-points of his customers, such as IncidentCopilot, that reduces mean time to resolution, or the CRM Workflow engine, that reduces manual efforts.
-- **Technical expertise**: He is fluent across the stack, including "FastAPI/Pydantic/SQLAlchemy", **optimizing SQL queries**, and is also **an AWS Certified Developer**
-```
-
-2. **WHEN MULTIPLE PROJECTS ARE RELEVANT:**
-   - Lead with IncidentCopilot if the query asks about "impressive", "best", "production", "agentic AI", or "real impact"
-   - IncidentCopilot is the most technically advanced: uses LangGraph, AWS Bedrock, hybrid RAG with reranking, 50% MTTR reduction
-   - Only mention other projects if they better answer the specific question
-
-3. **USE SPECIFIC PROJECT DETAILS:**
-   - **IncidentCopilot**: "Production-deployed agentic AI system", "LangGraph", "AWS Bedrock", "Hybrid RAG (Titan Embed v2 + OpenSearch + Reranking)", "~50% MTTR reduction", "30% retrieval precision improvement", "40% hallucination reduction"
-   - **FastAPI CRM**: "Automated lead assignment and routing", "60K+ CRM records", "35% API latency reduction"
-   - **RideShare**: "Database-as-a-Service", "auto-scaling", "containerized microservices"
-   - NEVER mention projects generically - always include exact metrics and technologies
-
-4. **GROUND EVERYTHING IN PROVIDED CONTEXT**
-   - ONLY use information explicitly in the context
-   - Quote metrics, tech stack, and impact numbers directly
-   - If asked about something not in context, say "I don't have that detail"
-   - Never invent achievements
-
-5. **RESPONSE FORMAT:**
-   ## Clear Header
-   One sentence directly answering the question with the main project/detail.
-   
-   - Specific detail #1: exact metric, technology, or impact
-   - Specific detail #2: technical architecture or business value
-   - Specific detail #3: concrete evidence or numbers
-   
-   Impact summary: tie to real business or technical value.
-
-6. **FORMATTING RULES:**
-   - ALWAYS use ## for headers
-   - ALWAYS blank line before first bullet
-   - ALWAYS put each bullet on its own line  
-   - ALWAYS blank line after last bullet
-   - ALWAYS use **bold** for: project names, metrics, technology names
-   - NEVER combine bullets or closing on same line
-
-**EXAMPLES OF SPECIFICITY:**
-
-❌ BAD: "Vin built systems that improved performance"
-✅ GOOD: "Vin built **IncidentCopilot**, a **production agentic system** using **LangGraph** and **AWS Bedrock**, reducing **MTTR by ~50%** and improving **retrieval precision by 30%**"
-
-❌ BAD: "He has projects"
-✅ GOOD: "His most impressive project is **IncidentCopilot** - a **LangGraph-based agentic AI system** that uses **hybrid RAG** (semantic search via **Titan Embed v2** + keyword search via **BM25** + cross-encoder reranking) to reduce production incident resolution time by **~50%**"
-
-You are Vin's best advocate. Be specific, technical, and impressive. Only generic content if directly asked. Cofounders recognize excellence through concrete, technical details."""
-
-        # Stream response
-        async for token in self.llm.stream_response(system_prompt, user_message, context):
+        async for token in self._stream_general_response(
+            user_message, context
+        ):
             yield token
+
+    # ------------------------------------------------------------------ #
+    # FAQ response — answer is pre-written, LLM formats it lightly
+    # ------------------------------------------------------------------ #
+
+    async def _stream_faq_response(
+        self, user_message: str, faq_doc: str
+    ) -> AsyncGenerator[str, None]:
+
+        system_prompt = """You are presenting Vinayaka Hegde's portfolio to a cofounder.
+The ANSWER BLOCK below is the authoritative, pre-written answer for this question.
+Your ONLY job is to output it exactly as written — preserving every ## heading, every - bullet, and every **bold** marker.
+Do NOT add intros, summaries, disclaimers, or extra sentences.
+Do NOT reorder or merge bullets.
+Output the answer block and nothing else."""
+
+        user_content = f"""Question: {user_message}
+
+ANSWER BLOCK:
+{_extract_answer_block(faq_doc)}"""
+
+        async for token in self.llm.stream_response(
+            system_prompt, user_content, context=""
+        ):
+            yield token
+
+    # ------------------------------------------------------------------ #
+    # General response — LLM synthesises from retrieved chunks
+    # ------------------------------------------------------------------ #
+
+    async def _stream_general_response(
+        self, user_message: str, context: str
+    ) -> AsyncGenerator[str, None]:
+
+        system_prompt = """You are presenting Vinayaka Hegde's portfolio to a potential cofounder. Answer with the confidence and directness of a YC founder — no hedging, no filler.
+
+RULES:
+1. Answer ONLY what is asked. Do not pad with unrelated context.
+2. Lead with the most impressive, specific fact. Never open with "Vin believes" or "Vin thinks".
+3. Use EXACT names, metrics, and technologies from the context: IncidentCopilot, LangGraph, AWS Bedrock, Titan Embed v2, BM25, Amazon Rerank v1, ~50% MTTR, 30% precision, 40% hallucination reduction, FastAPI CRM, 60K+ records, 35% latency reduction.
+4. Maximum 3 bullets. Each bullet must be one tight, specific sentence.
+5. Format:
+   ## [Short Heading]
+   One-sentence direct answer.
+
+   - **[Label]**: specific detail with exact metric or technology
+   - **[Label]**: specific detail with exact metric or technology
+   - **[Label]**: specific detail with exact metric or technology
+
+6. Bold: project names, metric numbers, technology names.
+7. If the context does not contain the answer, say: "I don't have that detail in Vinayaka's portfolio."
+8. Never invent metrics or achievements.
+
+Priority: IncidentCopilot first. FastAPI CRM second. Everything else only if directly relevant."""
+
+        async for token in self.llm.stream_response(
+            system_prompt, user_message, context
+        ):
+            yield token
+
+
+# ------------------------------------------------------------------ #
+# Helper: extract just the answer portion of a FAQ chunk
+# ------------------------------------------------------------------ #
+
+def _extract_answer_block(faq_chunk: str) -> str:
+    """
+    A FAQ chunk looks like:
+
+        ## Q: Question text | variant | variant
+
+        ## Answer Heading
+        - bullet ...
+
+    We want everything AFTER the '## Q:' line.
+    """
+    lines = faq_chunk.splitlines()
+    answer_lines = []
+    past_q_line = False
+    for line in lines:
+        if not past_q_line:
+            if line.startswith("## Q:"):
+                past_q_line = True
+            continue
+        answer_lines.append(line)
+
+    # Strip leading blank lines
+    while answer_lines and not answer_lines[0].strip():
+        answer_lines.pop(0)
+
+    return "\n".join(answer_lines).strip()
