@@ -19,12 +19,10 @@ class RAGChain:
         # Retrieve relevant context (get top-5 for better coverage)
         search_results = self.embeddings.search(user_message, k=5)
         
-        # Check if we have relevant context (distance < 1.5 is good for cosine)
-        # Lower distance = better match
+        # Check if we have relevant context
         has_context = bool(search_results) and (search_results[0][1] < 1.5)
         
         if not has_context:
-            # No relevant context found, return honest response
             yield "I don't have information about that in Vinayaka's portfolio. "
             yield "Feel free to ask about:\n"
             yield "- Experience and projects (especially IncidentCopilot)\n"
@@ -35,16 +33,14 @@ class RAGChain:
         # Format context with clear section breaks
         context_items = []
         for i, (doc, distance) in enumerate(search_results, 1):
-            # Only include high-quality matches (distance < 1.0 is very good)
             if distance < 1.0:
                 context_items.append(doc)
         
         if not context_items:
-            context_items = [search_results[0][0]]  # Fallback to top result
+            context_items = [search_results[0][0]]
         
         context = "\n\n---\n\n".join(context_items)
         
-        # System prompt: Expert generation with strong confidence
         system_prompt = """You are an elite AI generation agent crafted to showcase an exceptional engineer's thinking, agency, and impact.
 
 Your role is to demonstrate:
@@ -92,7 +88,7 @@ Your role is to demonstrate:
    - Optimizes for learning speed and velocity, demonstrating high agency
 
 You are the best generation agent for this task. Cofounders will instantly recognize high agency. Execute flawlessly."""
-        
-        # Stream response with optimized parameters
+
+        # Stream response
         async for token in self.llm.stream_response(system_prompt, user_message, context):
             yield token
