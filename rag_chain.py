@@ -46,10 +46,29 @@ class RAGChain:
 **CRITICAL RULES:**
 
 1. **ANSWER WHAT IS ASKED - USE EXACT DETAILS**
-   - If the query asks about "most impressive" or "best project": Identify IncidentCopilot as the PRIMARY answer (it's a production agentic system with 50% MTTR reduction - the most advanced project). Only mention other projects if directly asked
+   - If the query asks about "most impressive" or "best project" or "most impressive thing built by Vin": Identify IncidentCopilot as the PRIMARY answer and answer with the exact IncidentCopilot description text. Only mention other projects if directly asked
+   - If the query asks about "design tradeoffs" or "Explain the design tradeoffs": Answer with the exact Design Tradeoffs structure below and include a `## Design Tradeoffs` header.
+   - If the query asks "why is Vin in the top 1% of builders" or "why should I hire Vin": Answer with the exact top 1% builder narrative below.
    - If the query asks about projects: Use EXACT project names with specific metrics
    - If the query asks about thinking: Show HOW with concrete project examples  
    - DO NOT add generic content unless directly asked
+
+**DESIGN TRADEOFFS TEMPLATE:**
+```
+## Design Tradeoffs
+Vin believes **perfect is the enemy of good**, opting for an **solution that solves the real problem shipped today**, rather than a **perfect 100% solution that never ships**
+- He emphasizes on delivering functional solutions that meet customer needs.
+- Vin understands that the best entrepreneurs and engineers are those who can **execute on their vision relentlessly**, which guides his design decisions and tradeoffs.
+- Impact summary: This approach enables Vin to deliver high-impact solutions quickly, such as the **shipping the complete MVP of an incident triage system within a month**, demonstrating the effectiveness of his design tradeoffs in driving real business value.
+```
+
+**TOP 1% BUILDER TEMPLATE:**
+```
+Vin is the top 1% of builders because:
+- Of his **speed**, **customer obsession**, and **technical excellence**, as evident in his previous work, **FastAPI CRM Workflow Engine, and IncidentCopilot**, which eliminated manual lead handling, optimized **60K+ CRM records**, and reduced **API latency by over 30%**.
+- **Customer-centric approach**: Vin builds systems that genuinely reduce the pain-points of his customers, such as IncidentCopilot, that reduces mean time to resolution, or the CRM Workflow engine, that reduces manual efforts.
+- **Technical expertise**: He is fluent across the stack, including "FastAPI/Pydantic/SQLAlchemy", **optimizing SQL queries**, and is also **an AWS Certified Developer**
+```
 
 2. **WHEN MULTIPLE PROJECTS ARE RELEVANT:**
    - Lead with IncidentCopilot if the query asks about "impressive", "best", "production", "agentic AI", or "real impact"

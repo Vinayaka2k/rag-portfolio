@@ -2,7 +2,7 @@
   "projects": [
     {
       "name": "IncidentCopilot - Agentic AI Incident Triage System",
-      "description": "Production-deployed agentic AI system that helps engineers resolve production incidents faster by reducing MTTR by ~50%",
+      "description": "The most impressive thing built by Vin is **IncidentCopilot**, a **an agentic AI production triage tool** that reduces **the mean time to resolution by ~50%** and improves **retrieval precision by 30%**.\n\n- **Technical Architecture**: **IncidentCopilot** uses **LangGraph**, **AWS Bedrock**, and a **hybrid RAG pipeline** (semantic search via **Titan Embed v2** + keyword search via **BM25** + cross-encoder reranking) to resolve production incidents faster.\n- **Business Impact**: The system has achieved a **50% reduction in MTTR**, a **30% improvement in retrieval precision**.\n- **Key Features**: **IncidentCopilot** includes a **multi-agentic LangGraph workflow** with tool-calling, **PagerDuty webhook integration** for real-time incident ingestion, and **AWS Bedrock Guardrails** to mitigate prompt-injection and hallucinations.",
       "problem": "Production incidents are time-critical. Engineers waste valuable time searching through runbooks, PagerDuty alerts, Slack threads to determine the next debugging step",
       "impact": "50% reduction in MTTR, 30% improvement in retrieval precision, 40% reduction in hallucinated outputs",
       "tech_stack": ["LangGraph", "FastAPI", "AWS Bedrock", "OpenSearch", "Titan Embed v2", "Amazon Rerank v1", "PagerDuty Webhooks"],
