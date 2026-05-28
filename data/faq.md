@@ -4,11 +4,11 @@
 
 ## Most Impressive Project
 
-The most impressive thing built by Vin is **IncidentCopilot**, a **production-deployed agentic AI triage system** that reduces **mean time to resolution (MTTR) by ~50%** and improves **retrieval precision by 30%**.
+The most impressive thing built by Vin is **[IncidentCopilot](https://incident-copilot-v3.vercel.app)**, a **production-deployed agentic AI triage system** that reduces **mean time to resolution (MTTR) by ~50%** and improves **retrieval precision by 30%**.
 
-- **Technical Architecture**: IncidentCopilot uses **LangGraph** for multi-agentic orchestration, **AWS Bedrock** for LLM inference, and a **hybrid RAG pipeline** — semantic search via **Titan Embed v2 + OpenSearch KNN**, keyword search via **BM25**, and cross-encoder reranking via **Amazon Rerank v1** — to surface the most relevant runbooks and past incidents instantly.
+- **Technical Architecture**: [IncidentCopilot](https://incident-copilot-v3.vercel.app) uses **LangGraph** for multi-agentic orchestration, **AWS Bedrock** for LLM inference, and a **hybrid RAG pipeline** — semantic search via **Titan Embed v2 + OpenSearch KNN**, keyword search via **BM25**, and cross-encoder reranking via **Amazon Rerank v1** — to surface the most relevant runbooks and past incidents instantly.
 
-- **Real Production Impact**: Deployed at **PESU Venture Labs**, the system reduced **MTTR by ~50%**, improved **retrieval precision by 30%**, and cut **hallucinated triage recommendations by 40%** using **AWS Bedrock Guardrails** and contextual grounding checks.
+- **Real Production Impact**: The system reduced **MTTR by ~50%**, improved **retrieval precision by 30%**, and cut **hallucinated triage recommendations by 40%** using **AWS Bedrock Guardrails** and contextual grounding checks.
 
 - **Why It Matters**: This is not a toy RAG app. It is a **multi-agent system with tool-calling, PagerDuty webhook integration, and real-time incident ingestion** — the same production patterns used by top AI engineering teams.
 
@@ -20,7 +20,7 @@ The most impressive thing built by Vin is **IncidentCopilot**, a **production-de
 
 Vin combines **speed, customer obsession, and technical depth** — three things that rarely coexist. He ships production-grade systems, not prototypes.
 
-- **He ships fast with real impact**: At **PESU Venture Labs**, he built and deployed **IncidentCopilot** — a full multi-agentic LangGraph system with hybrid RAG and PagerDuty integration — reducing **MTTR by ~50%**. At **LeadSquared**, he built the **FastAPI CRM Workflow Engine** that eliminated manual lead handling entirely across **60K+ CRM records** and reduced **API latency by 35%**.
+- **He ships fast with real impact**: Vin built and deployed **[IncidentCopilot](https://incident-copilot-v3.vercel.app)** — a full multi-agentic LangGraph system with hybrid RAG and PagerDuty integration — reducing **MTTR by ~50%**. At **LeadSquared**, he built the **FastAPI CRM Workflow Engine** that eliminated manual lead handling entirely across **60K+ CRM records** and reduced **API latency by 35%**.
 
 - **He operates from first principles**: Every architecture decision starts with *why*. He chose **hybrid RAG over pure semantic search** because BM25 outperforms embeddings on exact-match incident keywords. He chose **SQLite over hosted vector DBs** for this portfolio to eliminate cold-start latency. He does not follow trends — he reasons from fundamentals.
 
@@ -34,11 +34,11 @@ Vin combines **speed, customer obsession, and technical depth** — three things
 
 Vin builds for the person suffering at 3 AM, not for the abstraction. Every product decision is grounded in **who is in pain and what is the fastest path to relief**.
 
-- **Customer pain first, architecture second**: Before writing a line of code for **IncidentCopilot**, Vin identified the exact bottleneck — engineers wasting critical minutes searching runbooks during live incidents. The entire hybrid RAG architecture (semantic + BM25 + reranking) was designed around one goal: surface the right runbook in under 500ms.
+- **Customer pain first, architecture second**: Before writing a line of code for **[IncidentCopilot](https://incident-copilot-v3.vercel.app)**, Vin identified the exact bottleneck — engineers wasting critical minutes searching runbooks during live incidents. The entire hybrid RAG architecture (semantic + BM25 + reranking) was designed around one goal: surface the right runbook in under 500ms.
 
-- **Ship 80%, iterate fast**: Vin believes a working solution today beats a perfect solution next quarter. He shipped the **complete MVP of IncidentCopilot within a month**, then iterated on precision and hallucination reduction based on real incident data — not hypothetical benchmarks.
+- **Ship 80%, iterate fast**: Vin believes a working solution today beats a perfect solution next quarter. He shipped the **complete MVP of [IncidentCopilot](https://incident-copilot-v3.vercel.app) within a month**, then iterated on precision and hallucination reduction based on real incident data — not hypothetical benchmarks.
 
-- **Grounding over speculation**: Every recommendation in **IncidentCopilot** is backed by a runbook or a past incident. Vin applies this principle universally — systems must produce **evidence-based outputs**, not confident guesses. That is why he built **AWS Bedrock Guardrails** and contextual grounding checks into the core pipeline.
+- **Grounding over speculation**: Every recommendation in **[IncidentCopilot](https://incident-copilot-v3.vercel.app)** is backed by a runbook or a past incident. Vin applies this principle universally — systems must produce **evidence-based outputs**, not confident guesses. That is why he built **AWS Bedrock Guardrails** and contextual grounding checks into the core pipeline.
 
 ---
 
@@ -46,9 +46,9 @@ Vin builds for the person suffering at 3 AM, not for the abstraction. Every prod
 
 ## Vin's Multi-Agentic AI Experience
 
-Vin has **production experience** building multi-agentic systems — not academic projects. **IncidentCopilot** is the proof.
+Vin has **production experience** building multi-agentic systems — not academic projects. **[IncidentCopilot](https://incident-copilot-v3.vercel.app)** is the proof.
 
-- **LangGraph multi-agent orchestration with tool-calling**: IncidentCopilot runs a **multi-agentic LangGraph workflow** with distinct agents for query rewriting, hybrid retrieval, cross-encoder reranking, and triage plan generation. Each agent uses **tool-calling** to invoke OpenSearch APIs, AWS Bedrock inference, and PagerDuty webhooks — coordinated by a stateful LangGraph graph.
+- **LangGraph multi-agent orchestration with tool-calling**: [IncidentCopilot](https://incident-copilot-v3.vercel.app) runs a **multi-agentic LangGraph workflow** with distinct agents for query rewriting, hybrid retrieval, cross-encoder reranking, and triage plan generation. Each agent uses **tool-calling** to invoke OpenSearch APIs, AWS Bedrock inference, and PagerDuty webhooks — coordinated by a stateful LangGraph graph.
 
 - **Evaluation harnesses and grounding checks**: Vin built **contextual grounding checks** using **AWS Bedrock Guardrails** that validate every LLM output against retrieved context before surfacing it to engineers — reducing hallucinated recommendations by **40%**. This is the same eval-first approach he applies to every agentic system: measure precision, catch regressions, iterate.
 
@@ -62,11 +62,11 @@ Vin has **production experience** building multi-agentic systems — not academi
 
 Vin believes **perfect is the enemy of good** — he ships a working solution that solves the real problem today rather than waiting for a perfect solution that never ships.
 
-- **Pragmatic architecture over academic elegance**: For **IncidentCopilot**, Vin chose **hybrid RAG (semantic + BM25 + reranking)** over a simpler pure-embedding approach because real incident keywords are exact-match — not paraphrase-match. He chose **SQLite + ChromaDB** for this portfolio over hosted vector databases to eliminate external dependencies and cold-start latency. Every tradeoff is driven by the actual constraint, not convention.
+- **Pragmatic architecture over academic elegance**: For **[IncidentCopilot](https://incident-copilot-v3.vercel.app)**, Vin chose **hybrid RAG (semantic + BM25 + reranking)** over a simpler pure-embedding approach because real incident keywords are exact-match — not paraphrase-match. He chose **SQLite + ChromaDB** for this portfolio over hosted vector databases to eliminate external dependencies and cold-start latency. Every tradeoff is driven by the actual constraint, not convention.
 
-- **Velocity with grounding**: Speed does not mean recklessness. At **LeadSquared**, Vin shipped the **FastAPI CRM engine** that handled **60K+ CRM records** with full **RBAC, pagination, and JWT auth** — fast and correct. At PESU Venture Labs, he shipped IncidentCopilot with **Bedrock Guardrails** baked in from day one, because hallucinations in incident triage are not acceptable.
+- **Velocity with grounding**: Speed does not mean recklessness. At **LeadSquared**, Vin shipped the **FastAPI CRM engine** that handled **60K+ CRM records** with full **RBAC, pagination, and JWT auth** — fast and correct. He shipped **[IncidentCopilot](https://incident-copilot-v3.vercel.app)** with **Bedrock Guardrails** baked in from day one, because hallucinations in incident triage are not acceptable.
 
-- **Impact summary**: This approach lets Vin deliver production-grade systems in weeks, not quarters — **IncidentCopilot MVP shipped within a month**, deployed to production, with measurable business impact on day one.
+- **Impact summary**: This approach lets Vin deliver production-grade systems in weeks, not quarters — **[IncidentCopilot](https://incident-copilot-v3.vercel.app) MVP shipped within a month**, deployed to production, with measurable business impact on day one.
 
 ---
 
@@ -76,11 +76,11 @@ Vin believes **perfect is the enemy of good** — he ships a working solution th
 
 Vin is drawn to startups because **constraints are where the best engineering happens**. Limited time, limited resources, real users — that is when you build things that actually matter.
 
-- **He thrives under constraint**: At **PESU Venture Labs**, Vin built a production agentic AI system with a small team in under a month. No lengthy planning cycles, no committee approvals — just identify the problem, architect the solution, ship it. That environment is where he does his best work.
+- **He thrives under constraint**: Vin built **[IncidentCopilot](https://incident-copilot-v3.vercel.app)** — a production multi-agentic LangGraph system with hybrid RAG and PagerDuty integration — in under a month. No lengthy planning cycles, no committee approvals — just identify the problem, architect the solution, ship it. That environment is where he does his best work.
 
-- **He wants to build AI that amplifies humans**: Vin believes AI should give engineers superpowers, not replace them. **IncidentCopilot** does not automate away the on-call engineer — it gives them the right context in 500ms so they can resolve incidents **50% faster**. That is the kind of product he wants to keep building: high-leverage AI tools for technical operators.
+- **He wants to build AI that amplifies humans**: Vin believes AI should give engineers superpowers, not replace them. **[IncidentCopilot](https://incident-copilot-v3.vercel.app)** does not automate away the on-call engineer — it gives them the right context in 500ms so they can resolve incidents **50% faster**. That is the kind of product he wants to keep building: high-leverage AI tools for technical operators.
 
-- **He operates like a founder already**: He does not wait for permission. He identifies what needs to be built, makes the architectural call, and ships. The **FastAPI CRM Workflow Engine** at LeadSquared, **IncidentCopilot** at PESU Venture Labs — both were built with full ownership from zero to production.
+- **He operates like a founder already**: He does not wait for permission. He identifies what needs to be built, makes the architectural call, and ships. **[IncidentCopilot](https://incident-copilot-v3.vercel.app)** and the **FastAPI CRM Workflow Engine** at **LeadSquared** were both built with full ownership from zero to production.
 
 ---
 
