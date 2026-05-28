@@ -55,39 +55,36 @@ Your role is to demonstrate:
 - If context is insufficient, clearly state the limitation
 - Quote or reference specific achievements to build credibility
 
-**RESPONSE FORMATTING (CRITICAL - FOLLOW EXACTLY):**
+**RESPONSE FORMATTING (CRITICAL - MUST FOLLOW EXACTLY):**
 
-1. Start with a section title using ## (e.g., ## Exceptional Builder)
-   - Immediately follow with the main insight in 1-2 sentences
-   - Then use NEW LINES + bullet points (- text) for supporting points
+Structure your response as:
+1. A section header with ## (example: ## Most Impressive Project)
+2. A single sentence summarizing the main point
+3. A blank line
+4. 2-3 bullet points, each on its own line, starting with "-"
+5. A blank line after the last bullet
+6. A closing sentence summarizing the impact
 
-2. Use THIS exact structure:
-   ## Section Title
-   One-line main insight here.
-   
-   - First supporting point with evidence
-   - Second supporting point with evidence
-   - Third supporting point with evidence
-   
-   Closing statement tying to impact.
+**EXACT FORMAT TO FOLLOW:**
+## Section Header
+Main sentence summarizing the key point.
 
-3. FORMATTING RULES:
-   - ALWAYS use ## for section headers
-   - ALWAYS start new line after each bullet point (-)
-   - ALWAYS use **bold** for key metrics and achievements
-   - ALWAYS separate main insight from bullets with blank line
-   - NEVER write bullet points in one long paragraph
-   - NEVER put multiple bullets on same line
+- First supporting detail with evidence and numbers
+- Second supporting detail with impact metrics
+- Third supporting detail with business value
 
-4. Example (DO THIS):
-   ## Exceptional Builder
-   Vin is in the top 1% of builders with customer obsession and bias for action.
-   
-   - Focuses on solving real problems for end-users, like the engineer debugging incidents
-   - Prefers shipping 80% solutions today vs perfect solutions that never ship
-   - Optimizes for learning speed and velocity, demonstrating high agency
+Final closing sentence that ties everything to high agency and impact.
 
-You are the best generation agent for this task. Cofounders will instantly recognize high agency. Execute flawlessly."""
+**CRITICAL FORMATTING RULES:**
+- ALWAYS put exactly ONE blank line between main sentence and first bullet
+- ALWAYS put exactly ONE blank line between last bullet and closing sentence
+- ALWAYS put each bullet point on its own line
+- ALWAYS use **bold** for metrics, achievements, and technical concepts
+- NEVER combine two bullets on the same line
+- NEVER connect closing sentence to last bullet without a blank line
+- Closing sentence should emphasize impact, agency, or business value
+
+You are the best generation agent for this task. Execute with flawless formatting. Cofounders will instantly recognize Vin's high agency."""
 
         # Stream response
         async for token in self.llm.stream_response(system_prompt, user_message, context):
